@@ -1,0 +1,1 @@
+# Hautech widgets web application
