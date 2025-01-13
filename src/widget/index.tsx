@@ -1,28 +1,25 @@
-import { Loader } from '@app/web-ui';
-import { Props } from './types';
-import { SDKProvider } from '../data';
-import useLogic from './logic';
+import { Loader } from "../ui";
+import { Props } from "./types";
+import { SDKProvider } from "../data";
+import useLogic from "./logic";
 
 const Widget = <IncomingMethodHandlers, OutcomingMethods, WidgetProps>(
-    props: Props<IncomingMethodHandlers, OutcomingMethods, WidgetProps>,
+  props: Props<IncomingMethodHandlers, OutcomingMethods, WidgetProps>
 ) => {
-    const { sdk, setIncomingMethodHandlers, widgetMethods, widgetProps } = useLogic<
-        IncomingMethodHandlers,
-        OutcomingMethods,
-        WidgetProps
-    >(props);
-    if (!sdk || !widgetProps) return <Loader text="Loading" />;
+  const { sdk, setIncomingMethodHandlers, widgetMethods, widgetProps } =
+    useLogic<IncomingMethodHandlers, OutcomingMethods, WidgetProps>(props);
+  if (!sdk || !widgetProps) return <Loader text="Loading" />;
 
-    return (
-        <SDKProvider sdk={sdk}>
-            <props.component
-                sdk={sdk}
-                setIncomingMethodHandlers={setIncomingMethodHandlers}
-                widgetMethods={widgetMethods}
-                widgetProps={widgetProps}
-            />
-        </SDKProvider>
-    );
+  return (
+    <SDKProvider sdk={sdk}>
+      <props.component
+        sdk={sdk}
+        setIncomingMethodHandlers={setIncomingMethodHandlers}
+        widgetMethods={widgetMethods}
+        widgetProps={widgetProps}
+      />
+    </SDKProvider>
+  );
 };
 
 export default Widget;
