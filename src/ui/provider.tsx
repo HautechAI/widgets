@@ -1,5 +1,4 @@
 import "react-toastify/dist/ReactToastify.css";
-import "primereact/resources/themes/lara-light-cyan/theme.css";
 
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import theme from "./theme";

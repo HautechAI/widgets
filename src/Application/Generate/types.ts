@@ -1,13 +1,15 @@
-import { ClientSDK } from '@hautechai/client';
+import { SDK } from "@hautechai/sdk";
 import {
-    GenerateWidgetIncomingMethodHandlers,
-    GenerateWidgetOutcomingMethods,
-    GenerateWidgetProps,
-} from '@hautechai/widgets';
+  GenerateWidgetIncomingMethodHandlers,
+  GenerateWidgetOutcomingMethods,
+  GenerateWidgetProps,
+} from "@hautechai/widgets";
 
 export type Props = {
-    sdk: ClientSDK;
-    setIncomingMethodHandlers: (handlers: Omit<GenerateWidgetOutcomingMethods, 'setProps'>) => void;
-    widgetMethods: GenerateWidgetIncomingMethodHandlers;
-    widgetProps: GenerateWidgetProps;
+  sdk: SDK;
+  setIncomingMethodHandlers: (
+    handlers: Omit<GenerateWidgetOutcomingMethods, "setProps">
+  ) => void;
+  widgetMethods: GenerateWidgetIncomingMethodHandlers;
+  widgetProps: GenerateWidgetProps;
 };

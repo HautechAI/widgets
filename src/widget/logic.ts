@@ -1,5 +1,5 @@
 import config from "../config";
-import { createClientSDK } from "@hautechai/client";
+import { createSDK } from "@hautechai/sdk";
 import { createRpcCommunication } from "@hautechai/rpc";
 import { Props } from "./types";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -23,7 +23,7 @@ const useLogic = <IncomingMethodHandlers, OutcomingMethods, WidgetProps>(
   );
   const sdk = useMemo(
     () =>
-      createClientSDK({
+      createSDK({
         authToken: communication.outcomingMethods.authToken,
         endpoint: config.coreUrl,
       }),
