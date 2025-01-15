@@ -12,7 +12,7 @@ export const useCollectionStacks = (collectionId: string) => {
   const sdk = useSDK();
 
   const key = ["collections", collectionId, "stacks"];
-  const limit = 20;
+  const limit = 50;
   const typename = "Stack";
 
   const onCreate = useCrudInfiniteListUpdater<
@@ -117,6 +117,7 @@ export const useCollectionStacks = (collectionId: string) => {
     initialPageParam: undefined,
     key,
     fetch: async (lastId: string | undefined) => {
+      // const stacks = await
       const stacks = await sdk.stacks.list({ collectionId, lastId, limit });
       return { items: stacks };
     },

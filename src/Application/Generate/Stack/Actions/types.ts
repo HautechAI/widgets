@@ -1,4 +1,4 @@
-import { GenerateWidgetProps } from "@hautechai/widgets";
+import { GenerateWidgetProps } from "../../types";
 import { ImageEntity, StackEntity } from "@hautechai/sdk";
 
 export interface Props {

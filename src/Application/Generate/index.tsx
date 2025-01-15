@@ -7,7 +7,7 @@ import {
   GenerateWidgetIncomingMethodHandlers,
   GenerateWidgetOutcomingMethods,
   GenerateWidgetProps,
-} from "@hautechai/widgets";
+} from "./types";
 import useLogic from "./logic";
 import Widget from "../../widget";
 
