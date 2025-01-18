@@ -1,6 +1,6 @@
 import { Loader } from "../ui";
 import { Props } from "./types";
-import { SDKProvider } from "../data";
+import { SDKProvider } from "./sdk";
 import useLogic from "./logic";
 
 const Widget = <IncomingMethodHandlers, OutcomingMethods, WidgetProps>(
@@ -21,5 +21,7 @@ const Widget = <IncomingMethodHandlers, OutcomingMethods, WidgetProps>(
     </SDKProvider>
   );
 };
+
+export { useSDK } from "./sdk";
 
 export default Widget;

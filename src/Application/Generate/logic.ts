@@ -1,7 +1,7 @@
 import { Props } from "./types";
 import { OperationEntity } from "@hautechai/sdk";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useCollectionStacks } from "../../data";
+import { useCollectionStacks } from "./api";
 import { getImageFromStack } from "./utils";
 
 const useLogic = (props: Props) => {
@@ -33,33 +33,22 @@ const useLogic = (props: Props) => {
     setLoading(true);
 
     try {
-      let prompt = props.widgetProps.input.prompt;
-      if (!prompt) {
-        let proposePromptOperation =
-          await props.sdk.operations.create.proposePrompt.v1({
-            input: { imageId: props.widgetProps.input.productImageId },
-          });
-        proposePromptOperation = await props.sdk.operations.wait({
-          id: proposePromptOperation.id,
-        });
-        if (!proposePromptOperation.output?.text)
-          throw new Error("Failed to propose prompt");
-        prompt = proposePromptOperation.output.text;
-      }
-
       let operation = await props.sdk.operations.create.generate.v1({
         input: {
           aspectRatio: props.widgetProps.input.aspectRatio ?? "1:1",
-          modelId: props.widgetProps.input.modelId ?? "1",
+          imageWeight: props.widgetProps.input.imageWeight ?? 0.5,
+          negativePrompt: props.widgetProps.input.negativePrompt ?? "",
+          guidanceScale: props.widgetProps.input.guidanceScale ?? 7,
+          inferenceSteps: props.widgetProps.input.inferenceSteps ?? 20,
           productImageId: props.widgetProps.input.productImageId,
-          prompt,
-          quality: props.widgetProps.input.quality ?? "high",
+          prompt: props.widgetProps.input.prompt,
           seed: props.widgetProps.input.seed ?? props.sdk.utils.seed(),
+          strength: props.widgetProps.input.strength ?? 0.8,
         },
       });
       operation = await props.sdk.operations.wait({ id: operation.id });
 
-      for (const imageId of operation.output?.imageIds ?? []) {
+      for (const imageId of (operation.output as any)?.imageIds ?? []) {
         const newOperation = await props.sdk.operations.create.select.v1({
           input: { imageId },
         });

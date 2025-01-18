@@ -1,7 +1,7 @@
 import { getImageFromStack } from "../../utils";
 import type { Props } from "./types";
 import { useCallback, useMemo } from "react";
-import { useImage } from "../../../../data";
+import { useImage } from "../../api";
 
 const useLogic = (props: Props) => {
   const canShow = props.stack.operations.some(

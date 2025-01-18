@@ -17,7 +17,7 @@ export type GenerateWidgetProps = {
     upscale?: GenerateWidgetButton;
   };
   collectionId: string;
-  input: Partial<GenerateV1Input> & { productImageId: string };
+  input: Partial<GenerateV1Input> & { productImageId: string; prompt: string };
 };
 
 export type GenerateWidgetOutcomingMethods = {

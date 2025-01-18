@@ -5,8 +5,8 @@ import {
   useNonNormalizedMutation,
   useNormalizedMutation,
 } from "react-query-crud";
-import { useSDK } from "./provider";
 import { useQuery } from "@tanstack/react-query";
+import { useSDK } from "../../widget";
 
 export const useCollectionStacks = (collectionId: string) => {
   const sdk = useSDK();
@@ -49,6 +49,7 @@ export const useCollectionStacks = (collectionId: string) => {
       pageParams: data.pageParams,
     }),
   });
+
   const onUpdateOperation = useCrudInfiniteListUpdater<
     string,
     StackEntity,
@@ -76,23 +77,19 @@ export const useCollectionStacks = (collectionId: string) => {
     },
   });
 
-  const addOperation = useNormalizedMutation({
-    run: async (props: { id: string; operationId: string }) =>
-      sdk.stacks.operations.add({
-        operationIds: [props.operationId],
+  const addOperations = useNormalizedMutation({
+    run: async (props: { id: string; operationIds: string[] }) => {
+      await sdk.stacks.operations.add({
+        operationIds: props.operationIds,
         stackId: props.id,
-      }),
+      });
+
+      const stack = await sdk.stacks.get({ id: props.id });
+      return stack!;
+    },
     typename,
   });
 
-  const addOperations = useNormalizedMutation({
-    run: async (props: { id: string; operationIds: string[] }) =>
-      sdk.stacks.operations.add({
-        operationIds: props.operationIds,
-        stackId: props.id,
-      }),
-    typename,
-  });
   const create = useNormalizedMutation<string, StackEntity, unknown>({
     run: async () => {
       const stack = await sdk.stacks.create();
@@ -106,24 +103,6 @@ export const useCollectionStacks = (collectionId: string) => {
     typename,
   });
 
-  const read = useCrudInfiniteListQuery<
-    string,
-    StackEntity,
-    { items: StackEntity[] },
-    string | undefined
-  >({
-    getNextPageParam: (lastPage) =>
-      lastPage?.items[lastPage.items.length - 1]?.id,
-    initialPageParam: undefined,
-    key,
-    fetch: async (lastId: string | undefined) => {
-      // const stacks = await
-      const stacks = await sdk.stacks.list({ collectionId, lastId, limit });
-      return { items: stacks };
-    },
-    typename,
-  });
-
   const del = useNonNormalizedMutation({
     run: async (props: { id: string }) =>
       sdk.collections.items.remove({
@@ -132,32 +111,61 @@ export const useCollectionStacks = (collectionId: string) => {
       }),
     update: onDelete,
   });
+
+  const read = useCrudInfiniteListQuery<
+    string,
+    StackEntity,
+    { items: StackEntity[]; nextCursor: string },
+    string | undefined
+  >({
+    getNextPageParam: (lastPage) => lastPage?.nextCursor,
+    initialPageParam: undefined,
+    key,
+    fetch: async (cursor: string | undefined) => {
+      const items = await sdk.collections.items.list({
+        collectionId,
+        cursor,
+        kind: "stack",
+        limit,
+      });
+      return {
+        items: items as unknown as StackEntity[],
+        nextCursor: items.nextCursor,
+      };
+    },
+    typename,
+  });
+
   const removeOperation = useNormalizedMutation({
-    run: async (props: { id: string; operationId: string }) =>
-      sdk.stacks.operations.remove({
+    run: async (props: { id: string; operationId: string }) => {
+      await sdk.stacks.operations.remove({
         operationIds: [props.operationId],
         stackId: props.id,
-      }),
+      });
+
+      const stack = await sdk.stacks.get({ id: props.id });
+      return stack!;
+    },
     typename,
   });
-  const update = useNormalizedMutation({
+
+  const updateMetadata = useNonNormalizedMutation({
     run: async (props: { id: string; metadata: any }) =>
       sdk.stacks.updateMetadata({ id: props.id, metadata: props.metadata }),
-    typename,
   });
+
   const updateOperation = useNonNormalizedMutation({
     run: async (_updatedOperation: OperationEntity) => Promise.resolve(),
     update: onUpdateOperation,
   });
 
   return {
-    addOperation,
     addOperations,
     create,
     delete: del,
     read,
     removeOperation,
-    update,
+    updateMetadata,
     updateOperation,
   };
 };
@@ -176,5 +184,3 @@ export const useImage = (imageId: string) => {
     },
   });
 };
-
-export * from "./provider";

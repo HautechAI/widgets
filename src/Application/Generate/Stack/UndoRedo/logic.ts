@@ -1,8 +1,7 @@
-import type { Props } from './types';
-import { useCallback } from 'react';
+import type { Props } from "./types";
 
 const useLogic = (props: Props) => {
-    return {};
+  return {};
 };
 
 export default useLogic;
