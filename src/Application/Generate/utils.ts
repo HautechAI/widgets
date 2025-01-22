@@ -1,7 +1,7 @@
 import { StackEntity } from "@hautechai/sdk";
 
 export const getImageFromStack = (stack: StackEntity): string | undefined => {
-  const finishedOperations = stack.operations.filter(
+  const finishedOperations = stack.items.filter(
     (operation) => operation.status === "finished"
   );
   if (!finishedOperations.length) return undefined;

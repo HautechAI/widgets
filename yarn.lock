@@ -472,10 +472,10 @@
   dependencies:
     tslib "^2.3.0"
 
-"@hautechai/sdk@0.0.7":
-  version "0.0.7"
-  resolved "https://registry.yarnpkg.com/@hautechai/sdk/-/sdk-0.0.7.tgz#f4d3ffdfdfb07921dc8318b1accf344784bfea15"
-  integrity sha512-EufXoOGmh7ANLZGBQHTadmhUrf+GzH0eLcA87jjXRUIUaYSlmqdgq9JCYvXBax9mE0ozV2BETDi+VoW3zvLjHg==
+"@hautechai/sdk@0.0.9":
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/@hautechai/sdk/-/sdk-0.0.9.tgz#dbf91600f1e5c3ae84cdcff15f19b08662292e74"
+  integrity sha512-gWUFrYzHilAe5Ko840d137gfBlT7UyDyrCP+piyjnFcZnrEelZNyWvB8ALxtgFg99mGeA7ejZL1QZLl2D4npBg==
   dependencies:
     axios "1.6.1"
     jsonwebtoken "8.5.1"

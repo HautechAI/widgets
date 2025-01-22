@@ -17,12 +17,8 @@ const useLogic = (props: Props) => {
   const [loading, setLoading] = useState(false);
 
   const onGetImages = useCallback(async () => {
-    const visibleStacks = stacks.value.filter((stack) =>
-      stack.operations.some(
-        (operation) =>
-          operation.type === "select.v1" && operation.status === "finished"
-      )
-    );
+    const visibleStacks = stacks.value;
+
     return visibleStacks
       .map((stack) => getImageFromStack(stack))
       .filter((imageId) => !!imageId) as string[];
@@ -49,13 +45,10 @@ const useLogic = (props: Props) => {
       operation = await props.sdk.operations.wait({ id: operation.id });
 
       for (const imageId of (operation.output as any)?.imageIds ?? []) {
-        const newOperation = await props.sdk.operations.create.select.v1({
-          input: { imageId },
-        });
         const newStack = await stacksAPI.create();
-        await stacksAPI.addOperations({
+        await stacksAPI.addItems({
           id: newStack.id,
-          operationIds: [operation.id, newOperation.id],
+          itemIds: [operation.id, imageId],
         });
       }
 

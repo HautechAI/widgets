@@ -4,7 +4,7 @@ import { useCallback, useMemo } from "react";
 import { useImage } from "../../api";
 
 const useLogic = (props: Props) => {
-  const canShow = props.stack.operations.some(
+  const canShow = props.stack.items.some(
     (operation: any) =>
       operation.type === "select.v1" && operation.status === "finished"
   );
@@ -13,8 +13,8 @@ const useLogic = (props: Props) => {
 
   const lastOperation = useMemo(
     () =>
-      props.stack.operations.length > 0
-        ? props.stack.operations[props.stack.operations.length - 1]
+      props.stack.items.length > 0
+        ? props.stack.items[props.stack.items.length - 1]
         : null,
     [props.stack]
   );

@@ -65,10 +65,8 @@ export const useCollectionStacks = (collectionId: string) => {
           ...page,
           items: page.items.map((item) => ({
             ...item,
-            operations: item.operations.map((operation) =>
-              operation.id === updatedOperation.id
-                ? updatedOperation
-                : operation
+            items: item.items.map((item) =>
+              item.id === updatedOperation.id ? updatedOperation : item
             ),
           })),
         })),
@@ -77,10 +75,10 @@ export const useCollectionStacks = (collectionId: string) => {
     },
   });
 
-  const addOperations = useNormalizedMutation({
-    run: async (props: { id: string; operationIds: string[] }) => {
-      await sdk.stacks.operations.add({
-        operationIds: props.operationIds,
+  const addItems = useNormalizedMutation({
+    run: async (props: { id: string; itemIds: string[] }) => {
+      await sdk.stacks.items.add({
+        itemIds: props.itemIds,
         stackId: props.id,
       });
 
@@ -130,16 +128,16 @@ export const useCollectionStacks = (collectionId: string) => {
       });
       return {
         items: items as unknown as StackEntity[],
-        nextCursor: items.nextCursor,
+        nextCursor: items.nextCursor ?? "",
       };
     },
     typename,
   });
 
-  const removeOperation = useNormalizedMutation({
-    run: async (props: { id: string; operationId: string }) => {
-      await sdk.stacks.operations.remove({
-        operationIds: [props.operationId],
+  const removeItem = useNormalizedMutation({
+    run: async (props: { id: string; itemId: string }) => {
+      await sdk.stacks.items.remove({
+        itemIds: [props.itemId],
         stackId: props.id,
       });
 
@@ -160,11 +158,11 @@ export const useCollectionStacks = (collectionId: string) => {
   });
 
   return {
-    addOperations,
+    addItems,
     create,
     delete: del,
     read,
-    removeOperation,
+    removeItem,
     updateMetadata,
     updateOperation,
   };
