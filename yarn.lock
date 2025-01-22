@@ -472,13 +472,14 @@
   dependencies:
     tslib "^2.3.0"
 
-"@hautechai/sdk@0.0.9":
-  version "0.0.9"
-  resolved "https://registry.yarnpkg.com/@hautechai/sdk/-/sdk-0.0.9.tgz#dbf91600f1e5c3ae84cdcff15f19b08662292e74"
-  integrity sha512-gWUFrYzHilAe5Ko840d137gfBlT7UyDyrCP+piyjnFcZnrEelZNyWvB8ALxtgFg99mGeA7ejZL1QZLl2D4npBg==
+"@hautechai/sdk@0.0.10":
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/@hautechai/sdk/-/sdk-0.0.10.tgz#7d7a9b7749b42c8c32b435cdc97eca06f6d3e893"
+  integrity sha512-x8GhBDVfJmRSz8BAxDyVK0LOHxXt4UTxWo5jkgPOuMPGLkiCGR+4Tz6GvqRU9rKLs7Vs0p3TRLAokSmLw9to9Q==
   dependencies:
     axios "1.6.1"
     jsonwebtoken "8.5.1"
+    jwt-decode "4.0.0"
     pusher-js "8.4.0-rc2"
 
 "@humanfs/core@^0.19.1":
@@ -1582,6 +1583,11 @@ jws@^3.2.2:
   dependencies:
     jwa "^1.4.1"
     safe-buffer "^5.0.1"
+
+jwt-decode@4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/jwt-decode/-/jwt-decode-4.0.0.tgz#2270352425fd413785b2faf11f6e755c5151bd4b"
+  integrity sha512-+KJGIyHgkGuIq3IEBNftfhW/LfWhXUIY6OmyVWjliu5KH1y0fw7VQ8YndE2O4qZdMSd9SqbnC8GOcZEy0Om7sA==
 
 keyv@^4.5.4:
   version "4.5.4"
