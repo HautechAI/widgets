@@ -4,10 +4,7 @@ import { useCallback, useMemo } from "react";
 import { useImage } from "../../api";
 
 const useLogic = (props: Props) => {
-  const canShow = props.stack.items.some(
-    (operation: any) =>
-      operation.type === "select.v1" && operation.status === "finished"
-  );
+  const canShow = props.stack.items.some((item: any) => item.kind === "image");
   const imageId = useMemo(() => getImageFromStack(props.stack), [props.stack]);
   const imageQuery = useImage(imageId!);
 
