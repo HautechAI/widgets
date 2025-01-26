@@ -2,7 +2,7 @@ import EmptyState from "./EmptyState";
 import { Loader } from "../../ui";
 import { Props } from "./types";
 // import Stack from "./Stack";
-// import Stacks from "./Stacks";
+import Stacks from "./Stacks";
 import {
   GenerateWidgetIncomingMethodHandlers,
   GenerateWidgetOutcomingMethods,
