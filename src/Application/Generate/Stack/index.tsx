@@ -17,7 +17,7 @@ const Stack = (props: Props) => {
     onDownload,
     onUpscale,
     redo,
-    retouchActions,
+    // retouchActions,
     running,
     stack,
     undo,
@@ -46,7 +46,7 @@ const Stack = (props: Props) => {
           image={image}
           onDownload={onDownload}
           onUpscale={onUpscale}
-          retouchActions={retouchActions}
+          // retouchActions={retouchActions}
           stack={stack}
           widgetProps={props.widgetProps}
         />

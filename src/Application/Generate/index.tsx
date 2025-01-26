@@ -1,7 +1,7 @@
 import EmptyState from "./EmptyState";
 import { Loader } from "../../ui";
 import { Props } from "./types";
-// import Stack from "./Stack";
+import Stack from "./Stack";
 import Stacks from "./Stacks";
 import {
   GenerateWidgetIncomingMethodHandlers,
@@ -24,14 +24,13 @@ const Generate = (props: Props) => {
 
   if (selectedStackId)
     return (
-      // <Stack
-      //   collectionId={props.widgetProps.collectionId}
-      //   onDeselectStack={onDeselectStack}
-      //   onDownloadImage={onDownloadImage}
-      //   stackId={selectedStackId}
-      //   widgetProps={props.widgetProps}
-      // />
-      <div>Stack</div>
+      <Stack
+        collectionId={props.widgetProps.collectionId}
+        onDeselectStack={onDeselectStack}
+        onDownloadImage={onDownloadImage}
+        stackId={selectedStackId}
+        widgetProps={props.widgetProps}
+      />
     );
 
   if (stacks.length === 0 && loading)
