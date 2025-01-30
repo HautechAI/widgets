@@ -22,14 +22,14 @@ const Actions = (props: Props) => {
         </Typography>
       </S.Size>
       <S.Row>
-        {/* {canShowRetouch && (
-                    <ActionsListButton
-                        actions={props.retouchActions}
-                        disabled={props.disabled}
-                        icon="brush"
-                        name={retouchText}
-                    />
-                )} */}
+        {canShowRetouch && (
+          <ActionsListButton
+            actions={props.retouchActions}
+            disabled={props.disabled}
+            icon="brush"
+            name={retouchText}
+          />
+        )}
         {canShowUpscale && (
           <S.Button
             disabled={!props.canUpscale || props.disabled}

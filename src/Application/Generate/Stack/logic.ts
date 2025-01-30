@@ -36,12 +36,13 @@ const useLogic = (props: Props) => {
     () => stack.items.length > 2 && !loading,
     [loading, stack.items]
   );
+
   const canUpscale = useMemo(
     () =>
-      stack.items.every(
+      !stack.items.some(
         (item) =>
           item.kind === "operation" &&
-          (item as OperationEntity).type !== "upscale.v1"
+          (item as OperationEntity).type === "upscale.v1"
       ) && !loading,
     [loading, stack]
   );
@@ -51,39 +52,39 @@ const useLogic = (props: Props) => {
     await runAction(() => props.onDownloadImage(imageId));
   }, [imageId, props.onDownloadImage, runAction]);
 
-  // const onRetouch = useCallback(
-  //   async (category: "bottom" | "dress" | "top") => {
-  //     if (!imageId) return;
-  //     await runAction(async () => {
-  //       const productImageId = stack.items[0].input.productImageId;
+  const onRetouch = useCallback(
+    async (category: "lower_body" | "upper_body" | "dresses") => {
+      if (!imageId) return;
+      await runAction(async () => {
+        const productImageId = stack.items[0].input.productImageId;
 
-  //       let describeOperation = await sdk.operations.create.describeProduct.v1({
-  //         input: { imageId: productImageId },
-  //       });
-  //       describeOperation = await sdk.operations.wait({
-  //         id: describeOperation.id,
-  //       });
-  //       if (!describeOperation.output?.text)
-  //         throw new Error("Failed to describe product");
+        let describeOperation = await sdk.operations.create.describeProduct.v1({
+          input: { imageId: productImageId },
+        });
+        describeOperation = await sdk.operations.wait({
+          id: describeOperation.id,
+        });
+        if (!describeOperation.output?.text)
+          throw new Error("Failed to describe product");
 
-  //       const operation = await sdk.operations.create.inpaint.v1({
-  //         input: {
-  //           image: imageId,,
-  //           productImageId,
-  //           productDescription: describeOperation.output.text,
-  //           category,
-  //           seed: sdk.utils.seed(),
-  //         },
-  //       });
+        const operation = await sdk.operations.create.vton.gisele.v1({
+          input: {
+            imageId,
+            productImageId,
+            productDescription: describeOperation.output.text,
+            category,
+            seed: sdk.utils.seed(),
+          },
+        });
 
-  //       await stacksAPI.addItems({
-  //         id: stack.id,
-  //         itemIds: [operation.id],
-  //       });
-  //     });
-  //   },
-  //   [imageId, runAction, stack, stacksAPI.addItems]
-  // );
+        await stacksAPI.addItems({
+          id: stack.id,
+          itemIds: [operation.id],
+        });
+      });
+    },
+    [imageId, runAction, stack, stacksAPI.addItems]
+  );
 
   const onUpscale = useCallback(async () => {
     if (!canUpscale || !imageId) return;
@@ -109,14 +110,14 @@ const useLogic = (props: Props) => {
     stacksAPI.updateMetadata,
   ]);
 
-  // const retouchActions = useMemo(
-  //   () => [
-  //     { name: "Retouch bottom", onClick: () => onRetouch("bottom") },
-  //     { name: "Retouch dress", onClick: () => onRetouch("dress") },
-  //     { name: "Retouch top", onClick: () => onRetouch("top") },
-  //   ],
-  //   [onRetouch]
-  // );
+  const retouchActions = useMemo(
+    () => [
+      { name: "Retouch bottom", onClick: () => onRetouch("lower_body") },
+      { name: "Retouch dress", onClick: () => onRetouch("dresses") },
+      { name: "Retouch top", onClick: () => onRetouch("upper_body") },
+    ],
+    [onRetouch]
+  );
 
   const running = useMemo(
     () =>
@@ -179,7 +180,7 @@ const useLogic = (props: Props) => {
     onDownload,
     onUpscale,
     redo,
-    // retouchActions,
+    retouchActions,
     running,
     stack,
     undo,

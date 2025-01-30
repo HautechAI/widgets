@@ -7,7 +7,7 @@ export interface Props {
   image: ImageEntity;
   onDownload: () => Promise<void>;
   onUpscale: () => Promise<void>;
-  // retouchActions: { name: string; onClick: () => void }[];
+  retouchActions: { name: string; onClick: () => void }[];
   stack: StackEntity;
   widgetProps: GenerateWidgetProps;
 }

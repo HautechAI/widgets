@@ -29,7 +29,7 @@ const useLogic = (props: Props) => {
     setLoading(true);
 
     try {
-      let operation = await props.sdk.operations.create.generate.v1({
+      let operation = await props.sdk.operations.create.haute.linda.v1({
         input: {
           aspectRatio: props.widgetProps.input.aspectRatio ?? "1:1",
           imageWeight: props.widgetProps.input.imageWeight ?? 0.5,
