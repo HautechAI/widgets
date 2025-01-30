@@ -147,9 +147,16 @@ export const useCollectionStacks = (collectionId: string) => {
     typename,
   });
 
-  const updateMetadata = useNonNormalizedMutation({
-    run: async (props: { id: string; metadata: any }) =>
-      sdk.stacks.updateMetadata({ id: props.id, metadata: props.metadata }),
+  const updateMetadata = useNormalizedMutation({
+    run: async (props: { id: string; metadata: any }) => {
+      await sdk.stacks.updateMetadata({
+        id: props.id,
+        metadata: props.metadata,
+      });
+      const stack = await sdk.stacks.get({ id: props.id });
+      return stack!;
+    },
+    typename,
   });
 
   const updateOperation = useNonNormalizedMutation({
