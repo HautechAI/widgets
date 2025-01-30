@@ -56,22 +56,27 @@ const useLogic = (props: Props) => {
     async (category: "lower_body" | "upper_body" | "dresses") => {
       if (!imageId) return;
       await runAction(async () => {
-        const productImageId = stack.items[0].input.productImageId;
+        const productImageId = (
+          (stack.items[0] as OperationEntity).input as any
+        ).productImageId;
 
-        let describeOperation = await sdk.operations.create.describeProduct.v1({
-          input: { imageId: productImageId },
+        let describeOperation = await sdk.operations.create.gpt.v1({
+          input: {
+            prompt: `Describe the product in the image. The product is a ${category}.`,
+            imageId: productImageId,
+          },
         });
         describeOperation = await sdk.operations.wait({
           id: describeOperation.id,
         });
-        if (!describeOperation.output?.text)
+        if (!(describeOperation.output as any)?.text)
           throw new Error("Failed to describe product");
 
         const operation = await sdk.operations.create.vton.gisele.v1({
           input: {
             imageId,
             productImageId,
-            productDescription: describeOperation.output.text,
+            productDescription: (describeOperation.output as any).text,
             category,
             seed: sdk.utils.seed(),
           },
@@ -81,6 +86,11 @@ const useLogic = (props: Props) => {
           id: stack.id,
           itemIds: [operation.id],
         });
+
+        const retouchOperation = await sdk.operations.wait({
+          id: operation.id,
+        });
+        await stacksAPI.updateOperation(retouchOperation);
       });
     },
     [imageId, runAction, stack, stacksAPI.addItems]
@@ -100,6 +110,8 @@ const useLogic = (props: Props) => {
         id: stack.id,
         metadata: { undone: [] },
       });
+      const upscaleOperation = await sdk.operations.wait({ id: operation.id });
+      await stacksAPI.updateOperation(upscaleOperation);
     });
   }, [
     canUpscale,

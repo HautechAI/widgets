@@ -1,7 +1,30 @@
-import { StackEntity } from "@hautechai/sdk";
+import { ImageEntity, OperationEntity, StackEntity } from "@hautechai/sdk";
 
 export const getImageFromStack = (stack: StackEntity): string | undefined => {
-  return stack.items.find((item) => item.kind === "image")?.id;
+  const reversedItems = [...stack.items].reverse();
+  const lastImageItem = reversedItems.find((item) => {
+    switch (item.kind) {
+      case "operation":
+        const operation = item as OperationEntity;
+        return (
+          operation.status === "finished" &&
+          (operation.output as any)?.kind === "image/single"
+        );
+      case "image":
+        return true;
+      default:
+        return false;
+    }
+  });
+
+  switch (lastImageItem?.kind) {
+    case "operation":
+      return ((lastImageItem as OperationEntity).output as any)?.imageId;
+    case "image":
+      return (lastImageItem as ImageEntity).id;
+    default:
+      return undefined;
+  }
 
   // const finishedOperations = stack.items.filter(
   //   (operation) => operation.status === "finished"
