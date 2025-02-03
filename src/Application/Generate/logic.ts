@@ -29,26 +29,23 @@ const useLogic = (props: Props) => {
     setLoading(true);
 
     try {
-      let operation = await props.sdk.operations.create.haute.linda.v1({
+      let hauteOperation = await props.sdk.operations.create.haute.linda.v1({
         input: {
           aspectRatio: props.widgetProps.input.aspectRatio ?? "1:1",
-          imageWeight: props.widgetProps.input.imageWeight ?? 0.5,
-          negativePrompt: props.widgetProps.input.negativePrompt ?? "",
-          guidanceScale: props.widgetProps.input.guidanceScale ?? 7,
-          inferenceSteps: props.widgetProps.input.inferenceSteps ?? 20,
           productImageId: props.widgetProps.input.productImageId,
           prompt: props.widgetProps.input.prompt,
           seed: props.widgetProps.input.seed ?? props.sdk.utils.seed(),
-          strength: props.widgetProps.input.strength ?? 0.8,
         },
       });
-      operation = await props.sdk.operations.wait({ id: operation.id });
+      hauteOperation = await props.sdk.operations.wait({
+        id: hauteOperation.id,
+      });
 
-      for (const imageId of (operation.output as any)?.imageIds ?? []) {
+      for (const imageId of (hauteOperation.output as any)?.imageIds ?? []) {
         const newStack = await stacksAPI.create();
         await stacksAPI.addItems({
           id: newStack.id,
-          itemIds: [operation.id, imageId],
+          itemIds: [hauteOperation.id, imageId],
         });
       }
 

@@ -608,10 +608,10 @@
   dependencies:
     tslib "^2.3.0"
 
-"@hautechai/sdk@0.0.19":
-  version "0.0.19"
-  resolved "https://registry.yarnpkg.com/@hautechai/sdk/-/sdk-0.0.19.tgz#a36b211c36da5f0d4a5d33b21b0ea43b494b2c64"
-  integrity sha512-VWMaH8CY+04Yaugtw0wPap3iY5314c1tfP5LmYo+fbLhagP0q8eBzIR8sCgSpwUeDZ34YnGS5oyLNrtiIBl5yQ==
+"@hautechai/sdk@0.0.21":
+  version "0.0.21"
+  resolved "https://registry.yarnpkg.com/@hautechai/sdk/-/sdk-0.0.21.tgz#351d2804c837480dae08bb8266cfa96bc3cdfd3e"
+  integrity sha512-CxV3qiMnb0xitJTfBycZ5EStbtW6f2UY2qE5C9WQhOEDHFNfOIgnumPvDQJ+XgYPD6cges9IhXsE5TSTdLEC2g==
   dependencies:
     "@hautechai/pipelines" "0.1.0"
     axios "1.6.1"

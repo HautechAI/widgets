@@ -62,7 +62,7 @@ const useLogic = (props: Props) => {
 
         let describeOperation = await sdk.operations.create.gpt.v1({
           input: {
-            prompt: `Describe the product in the image. The product is a ${category}.`,
+            prompt: `Describe the product in the image. The product is a ${category}. Return the description as json { text }`,
             imageId: productImageId,
           },
         });
