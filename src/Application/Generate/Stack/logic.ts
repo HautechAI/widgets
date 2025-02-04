@@ -62,21 +62,27 @@ const useLogic = (props: Props) => {
 
         let describeOperation = await sdk.operations.create.gpt.v1({
           input: {
-            prompt: `Describe the product in the image. The product is a ${category}. Return the description as json { text }`,
+            prompt: `Describe product on the photo and detect product category (e.g t-shirt, jeans, shirt, etc.). Return response in JSON format:
+{
+   description: string
+}
+          Description should contain maximum 5 words and contain only valuable information without redundant articles and words.`,
             imageId: productImageId,
           },
         });
         describeOperation = await sdk.operations.wait({
           id: describeOperation.id,
         });
-        if (!(describeOperation.output as any)?.text)
+        console.log(describeOperation.output);
+        if (!(describeOperation.output as any)?.data.description)
           throw new Error("Failed to describe product");
 
         const operation = await sdk.operations.create.vton.gisele.v1({
           input: {
             imageId,
             productImageId,
-            productDescription: (describeOperation.output as any).text,
+            productDescription: (describeOperation.output as any).data
+              .description,
             category,
             seed: sdk.utils.seed(),
           },
