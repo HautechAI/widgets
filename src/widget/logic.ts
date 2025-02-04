@@ -1,64 +1,29 @@
-import config from "../config";
 import { createSDK } from "@hautechai/sdk";
-import { createRpcCommunication } from "@hautechai/rpc";
-import { Props } from "./types";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { Props, WidgetHandlers, WidgetMethods, WidgetProps } from "./types";
 
-const useLogic = <IncomingMethodHandlers, OutcomingMethods, WidgetProps>(
-  props: Props<IncomingMethodHandlers, OutcomingMethods, WidgetProps>
-) => {
-  const communication = useMemo(
-    () =>
-      createRpcCommunication({
-        outcomingMethods: (call) => ({
-          ...props.createOutcomingMethods(call),
-          authToken: (): Promise<string> => call("authToken", []),
-          ready: (): Promise<string> => call("ready", []),
-        }),
-        sendMessage: (message: any) =>
-          window.parent.postMessage({ bus: "hautech", ...message }, "*"),
-      }),
-
-    []
-  );
-  const sdk = useMemo(
-    () =>
-      createSDK({
-        authToken: communication.outcomingMethods.authToken,
-        endpoint: config.coreUrl,
-      }),
-    []
-  );
-  const [widgetProps, setWidgetProps] = useState<WidgetProps>();
-
-  const setIncomingMethodHandlers = useCallback(
-    (incomingMethodHandlers: Omit<IncomingMethodHandlers, "setProps">) => {
-      communication.updateIncomingMethodHandlers({
-        ...incomingMethodHandlers,
-        setProps: (props: WidgetProps) => setWidgetProps(props),
-      });
-    },
-    []
+const useLogic = (props: Props) => {
+  const sdk = useMemo(() => {
+    const s = createSDK({
+      authToken: () => props.handlers.onGetAuthToken(),
+      endpoint: "https://api.dev.hautech.ai",
+    });
+    props.methodsRef.sdk = () => s;
+    return s;
+  }, []);
+  const [widgetProps, setWidgetProps] = useState<WidgetProps>(props.props);
+  const [widgetHandlers, setWidgetHandlers] = useState<WidgetHandlers>(
+    props.handlers
   );
 
   useEffect(() => {
-    const listen = (event: any) => {
-      if (event.data.bus === "hautech") communication.handleMessage(event.data);
-    };
-    window.addEventListener("message", listen);
-
-    setIncomingMethodHandlers({} as any); // This line sets setProps handler for the first call
-    communication.outcomingMethods.ready();
-    return () => {
-      window.removeEventListener("message", listen);
-    };
-  }, []);
+    props.methodsRef.setProps = async (props) => setWidgetProps(props);
+  }, [setWidgetProps]);
 
   return {
     sdk,
-    setIncomingMethodHandlers,
-    widgetMethods: communication.outcomingMethods,
     widgetProps,
+    widgetHandlers,
   };
 };
 
