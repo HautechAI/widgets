@@ -39,9 +39,8 @@ type Form = {
 
 export const Preview = () => {
   const [form, setForm] = useState<Form>({
-    token:
-      "eyJhbGciOiJSUzI1NiIsImtpZCI6IjJkYjJkOTMyLWM3YWItNGYwMi04YTE2LTcwNDdlNWJiZTIwNiJ9.eyJwZXJtaXNzaW9ucyI6WyIqIl0sImlzcyI6IjRhZGNmMTAwLWJiNzYtNGRhNi04NTNkLTMwZmRjMTVhM2ZlMiIsImlhdCI6MTczODYzMzc3M30.BSk-INMagyugZgp1bThBceWu_CvPcooeW-z8TK2dMbgtJfEbSmDtZVclMSUwtM966pfjTEx426hja2TlZwBab11UEKw3o4dFyCC8Un53QU1FWFasHHBKynadurigB3_SA4pYpPKnpH3IDTlwF3xgA51CDDcICt0pcMIPJVYpJVSIGXNMvy-TfyReuyV83YnIj0XkizWm3LGvys5lIMHWK18hA2x0srTPI_gU4Dc_00Slr5corLVMt6Zjn_C3p4xpP1cB_Zh1EqUytG8mEpXInea862v1nmIAe_VwH77Omb8BVCD2GVCOuLkz6EsPzsyYOHApw-Vu-GV_A7HavbS_fg",
-    collectionId: "72d17c80-39cf-43a0-9c9d-68ef3be67088",
+    token: "",
+    collectionId: "",
     model: "linda",
     seed: "42",
     enhance: true,
