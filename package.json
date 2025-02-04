@@ -1,10 +1,11 @@
 {
   "name": "@hautechai/widgets",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build && yarn tsup src/Widget/index.tsx --format cjs,esm --dts --clean --tsconfig tsconfig.app.json --dts-only && node preparePackage.js",
+    "build": "tsc -b && vite build",
+    "build:lib": "tsc -b && vite build -c vite.config.lib.ts && yarn tsup src/Widget/index.tsx --format cjs,esm --dts --clean --tsconfig tsconfig.app.json --dts-only && node preparePackage.js",
     "lint": "eslint .",
     "preview": "vite preview"
   },
