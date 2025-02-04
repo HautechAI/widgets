@@ -24,3 +24,4 @@ const newPackage = {
 };
 
 fs.writeFileSync("./dist/package.json", JSON.stringify(newPackage, null, 2));
+fs.writeFileSync("./dist/README.md", fs.readFileSync("./README.md"));
