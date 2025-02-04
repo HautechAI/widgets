@@ -1,27 +1,43 @@
-import { Loader } from "../ui";
-import { Props } from "./types";
-import { SDKProvider } from "./sdk";
-import useLogic from "./logic";
+import ReactDOM from "react-dom/client";
 
-const Widget = <IncomingMethodHandlers, OutcomingMethods, WidgetProps>(
-  props: Props<IncomingMethodHandlers, OutcomingMethods, WidgetProps>
-) => {
-  const { sdk, setIncomingMethodHandlers, widgetMethods, widgetProps } =
-    useLogic<IncomingMethodHandlers, OutcomingMethods, WidgetProps>(props);
+import Generate from "./components/Generate";
+import Layout from "./components/Layout";
+import ProvidersWrapper from "./components/ProvidersWrapper";
+import { WidgetContextProvider } from "./context";
+import useLogic from "./logic";
+import { Props, WidgetMethods } from "./types";
+import { Loader } from "./ui";
+
+export const Widget = (props: Props) => {
+  const { sdk, widgetProps, widgetHandlers } = useLogic(props);
   if (!sdk || !widgetProps) return <Loader text="Loading" />;
 
   return (
-    <SDKProvider sdk={sdk}>
-      <props.component
-        sdk={sdk}
-        setIncomingMethodHandlers={setIncomingMethodHandlers}
-        widgetMethods={widgetMethods}
-        widgetProps={widgetProps}
-      />
-    </SDKProvider>
+    <WidgetContextProvider
+      value={{
+        sdk,
+        widgetProps,
+        widgetHandlers,
+        methodsRef: props.methodsRef,
+      }}
+    >
+      <ProvidersWrapper>
+        <Layout>
+          <Generate />
+        </Layout>
+      </ProvidersWrapper>
+    </WidgetContextProvider>
   );
 };
 
-export { useSDK } from "./sdk";
+export const init = (
+  element: HTMLElement,
+  props: Omit<Props, "methodsRef">
+) => {
+  const methodsRef: Partial<WidgetMethods> = {};
 
-export default Widget;
+  const root = ReactDOM.createRoot(element);
+  root.render(<Widget {...props} methodsRef={methodsRef} />);
+
+  return methodsRef;
+};
