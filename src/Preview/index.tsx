@@ -64,6 +64,7 @@ export const Preview = () => {
         category: form.productCategory,
         enhance: form.enhance,
       },
+      apiEndpoint: "https://api.dev.hautech.ai",
     } as WidgetProps;
   };
 

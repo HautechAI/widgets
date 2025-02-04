@@ -35,6 +35,7 @@ export type WidgetProps = {
     retouch?: WidgetButtonConfiguration;
     upscale?: WidgetButtonConfiguration;
   };
+  apiEndpoint?: string;
 };
 
 export type WidgetContextValue = {

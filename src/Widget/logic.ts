@@ -6,15 +6,13 @@ const useLogic = (props: Props) => {
   const sdk = useMemo(() => {
     const s = createSDK({
       authToken: () => props.handlers.onGetAuthToken(),
-      endpoint: "https://api.dev.hautech.ai",
+      endpoint: props.props.apiEndpoint,
     });
     props.methodsRef.sdk = () => s;
     return s;
   }, []);
   const [widgetProps, setWidgetProps] = useState<WidgetProps>(props.props);
-  const [widgetHandlers, _] = useState<WidgetHandlers>(
-    props.handlers
-  );
+  const [widgetHandlers, _] = useState<WidgetHandlers>(props.handlers);
 
   useEffect(() => {
     props.methodsRef.setProps = async (props) => setWidgetProps(props);

@@ -1,10 +1,15 @@
 import * as fs from "fs";
 
-const { name, version } = JSON.parse(fs.readFileSync("./package.json"));
+const { name, version, dependencies } = JSON.parse(
+  fs.readFileSync("./package.json")
+);
 
 const newPackage = {
   name,
   version,
+  dependencies: {
+    ["@hautechai/sdk"]: dependencies["@hautechai/sdk"],
+  },
 
   main: "./index.cjs",
   module: "./index.mjs",
