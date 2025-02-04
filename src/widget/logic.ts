@@ -1,6 +1,6 @@
 import { createSDK } from "@hautechai/sdk";
 import { useEffect, useMemo, useState } from "react";
-import { Props, WidgetHandlers, WidgetMethods, WidgetProps } from "./types";
+import { Props, WidgetHandlers, WidgetProps } from "./types";
 
 const useLogic = (props: Props) => {
   const sdk = useMemo(() => {
@@ -12,7 +12,7 @@ const useLogic = (props: Props) => {
     return s;
   }, []);
   const [widgetProps, setWidgetProps] = useState<WidgetProps>(props.props);
-  const [widgetHandlers, setWidgetHandlers] = useState<WidgetHandlers>(
+  const [widgetHandlers, _] = useState<WidgetHandlers>(
     props.handlers
   );
 

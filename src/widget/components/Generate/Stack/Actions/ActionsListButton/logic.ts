@@ -1,25 +1,24 @@
-import { useCallback, useState } from 'react';
-import type { Props } from './types';
+import { useCallback, useState } from "react";
 
-const useLogic = (props: Props) => {
-    const [anchor, setAnchor] = useState<HTMLElement | null>(null);
-    const [menuOpen, setMenuOpen] = useState(false);
+const useLogic = () => {
+  const [anchor, setAnchor] = useState<HTMLElement | null>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
 
-    const onCloseMenu = useCallback(() => setMenuOpen(false), []);
-    const onOpenMenu = useCallback((event: any) => {
-        setAnchor(event.currentTarget);
-        setMenuOpen(true);
-    }, []);
+  const onCloseMenu = useCallback(() => setMenuOpen(false), []);
+  const onOpenMenu = useCallback((event: any) => {
+    setAnchor(event.currentTarget);
+    setMenuOpen(true);
+  }, []);
 
-    const onClickAction = useCallback(
-        (action: { name: string; onClick: () => void | Promise<void> }) => {
-            onCloseMenu();
-            action.onClick();
-        },
-        [onCloseMenu],
-    );
+  const onClickAction = useCallback(
+    (action: { name: string; onClick: () => void | Promise<void> }) => {
+      onCloseMenu();
+      action.onClick();
+    },
+    [onCloseMenu]
+  );
 
-    return { anchor, menuOpen, onClickAction, onCloseMenu, onOpenMenu };
+  return { anchor, menuOpen, onClickAction, onCloseMenu, onOpenMenu };
 };
 
 export default useLogic;

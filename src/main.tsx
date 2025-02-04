@@ -1,5 +1,4 @@
 import ReactDOM from "react-dom/client";
-import "./main.css";
 import { Preview } from "./Preview";
 
 const root = ReactDOM.createRoot(

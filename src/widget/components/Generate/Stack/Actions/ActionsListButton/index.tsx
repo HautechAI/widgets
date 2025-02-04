@@ -5,7 +5,7 @@ import type { Props } from "./types";
 
 const ActionsListButton = (props: Props) => {
   const { anchor, menuOpen, onClickAction, onCloseMenu, onOpenMenu } =
-    useLogic(props);
+    useLogic();
   return (
     <S.Container>
       <S.Button

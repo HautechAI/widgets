@@ -1,5 +1,3 @@
-import "react-toastify/dist/ReactToastify.css";
-
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import theme from "./theme";
 import { toast, ToastContainer } from "react-toastify";

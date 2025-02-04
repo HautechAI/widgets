@@ -6,7 +6,7 @@ import Undo from "../../../Icons/undo.svg?react";
 import Redo from "../../../Icons/redo.svg?react";
 
 const UndoRedo = (props: Props) => {
-  const {} = useLogic(props);
+  const {} = useLogic();
 
   return (
     <S.Container>

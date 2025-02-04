@@ -12,7 +12,7 @@ const Actions = (props: Props) => {
     downloadText,
     retouchText,
     upscaleText,
-  } = useLogic(props);
+  } = useLogic();
   return (
     <S.Container>
       <S.Size>

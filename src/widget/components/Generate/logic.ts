@@ -1,12 +1,11 @@
-import { OperationEntity } from "@hautechai/sdk";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useWidgetContext } from "../../context";
 import { useCollectionStacks } from "./api";
 import { getImageFromStack } from "./utils";
-import { useWidgetContext } from "../../context";
 
 const NaomiPreprocessedGarment: Record<string, string> = {};
 
-const useLogic = (props: {}) => {
+const useLogic = () => {
   const { sdk, widgetProps, widgetHandlers, methodsRef } = useWidgetContext();
 
   const scrollController = useRef<{ scrollToTop: () => void } | undefined>(

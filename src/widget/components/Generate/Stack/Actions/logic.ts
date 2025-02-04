@@ -1,7 +1,6 @@
 import { useWidgetContext } from "../../../../context";
-import type { Props } from "./types";
 
-const useLogic = (props: Props) => {
+const useLogic = () => {
   const { widgetProps } = useWidgetContext();
 
   const canShowDownload = widgetProps.buttons?.download?.visible ?? true;

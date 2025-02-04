@@ -4,7 +4,7 @@ import useLogic from "./logic";
 import Stack from "./Stack";
 import Stacks from "./Stacks";
 
-const Generate = (props: {}) => {
+const Generate = () => {
   const {
     loading,
     onDeselectStack,
@@ -13,7 +13,7 @@ const Generate = (props: {}) => {
     onSelectStack,
     selectedStackId,
     stacks,
-  } = useLogic(props);
+  } = useLogic();
 
   if (selectedStackId)
     return (
