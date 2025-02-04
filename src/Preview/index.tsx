@@ -287,7 +287,9 @@ export const Preview = () => {
           <SectionTitle>Step 7: Run generation</SectionTitle>
           <button
             disabled={
-              !form.poseId || !form.productImageId || !form.collectionId
+              !form.productImageId ||
+              !form.collectionId ||
+              (!form.poseId && form.model === "naomi")
             }
             onClick={() => {
               widgetMethods?.start?.();
