@@ -35,7 +35,6 @@ export type WidgetProps = {
     retouch?: WidgetButtonConfiguration;
     upscale?: WidgetButtonConfiguration;
   };
-  apiEndpoint?: string;
 };
 
 export type WidgetContextValue = {
@@ -49,4 +48,5 @@ export type Props = {
   props: WidgetProps; //
   handlers: WidgetHandlers;
   methodsRef: Partial<WidgetMethods>;
+  endpoint?: string;
 };

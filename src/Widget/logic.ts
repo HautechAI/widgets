@@ -6,7 +6,7 @@ const useLogic = (props: Props) => {
   const sdk = useMemo(() => {
     const s = createSDK({
       authToken: () => props.handlers.onGetAuthToken(),
-      endpoint: props.props.apiEndpoint,
+      endpoint: props.endpoint,
     });
     props.methodsRef.sdk = () => s;
     return s;

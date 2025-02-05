@@ -64,7 +64,6 @@ export const Preview = () => {
         category: form.productCategory,
         enhance: form.enhance,
       },
-      apiEndpoint: "https://api.dev.hautech.ai",
     } as WidgetProps;
   };
 
@@ -83,6 +82,7 @@ export const Preview = () => {
 
   const handleInit = () => {
     const methods = init(document.getElementById("widget") as HTMLElement, {
+      endpoint: "https://api.dev.hautech.ai",
       props: formToWidgetProps(form),
       handlers: {
         onGetAuthToken: async () => {
