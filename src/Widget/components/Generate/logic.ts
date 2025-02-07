@@ -65,7 +65,7 @@ const useLogic = () => {
               const newStack = await stacksAPI.create();
               await stacksAPI.addItems({
                 id: newStack.id,
-                itemIds: [hauteOperation.id, imageId],
+                itemIds: [imageId],
               });
             }
           )
@@ -197,7 +197,7 @@ const useLogic = () => {
         const newStack = await stacksAPI.create();
         await stacksAPI.addItems({
           id: newStack.id,
-          itemIds: [hauteOperation.id, resultImageId],
+          itemIds: [resultImageId],
         });
       }
 
