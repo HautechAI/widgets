@@ -8,6 +8,7 @@ const style = {
         overflow-y: scroll;
         scrollbar-width: none;
         width: 100%;
+        gap: 8px;
 
         ::-webkit-scrollbar {
             display: none;

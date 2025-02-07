@@ -1,6 +1,6 @@
 import { createSDK } from "@hautechai/sdk";
 import { ToggleButton, ToggleButtonGroup } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { init } from "../Widget";
 import { WidgetMethods, WidgetProps } from "../Widget/types";
 import SingleImageUploader, {
@@ -51,19 +51,25 @@ export const Preview = () => {
   const formToWidgetProps = (form: Form) => {
     return {
       collectionId: form.collectionId,
-      input: {
-        model: form.model,
-        seed: parseInt(form.seed ?? "42"),
-        prompt: form.prompt,
-        // linda
-        aspectRatio: "1:1",
-        productImageId: form.productImageId,
-        // naomi
-        garmentImageId: form.productImageId,
-        poseId: form.poseId,
-        category: form.productCategory,
-        enhance: form.enhance,
-      },
+      input:
+        form.model === "linda"
+          ? {
+              model: form.model,
+              seed: parseInt(form.seed ?? "42"),
+              productImageId: form.productImageId,
+              prompt: form.prompt,
+              aspectRatio: "1:1",
+              enhance: form.enhance,
+            }
+          : {
+              model: form.model,
+              seed: parseInt(form.seed ?? "42"),
+              productImageId: form.productImageId,
+              prompt: form.prompt,
+              category: form.productCategory,
+              poseId: form.poseId,
+              enhance: form.enhance,
+            },
     } as WidgetProps;
   };
 
@@ -73,12 +79,12 @@ export const Preview = () => {
     widgetMethods?.setProps?.(formToWidgetProps(form));
   }, [form]);
 
-  const sdk = () => {
+  const sdk = useMemo(() => {
     return createSDK({
       authToken: () => form.token!,
       endpoint: "https://api.dev.hautech.ai",
     });
-  };
+  }, [form.token]);
 
   const handleInit = () => {
     const methods = init(document.getElementById("widget") as HTMLElement, {
@@ -107,19 +113,19 @@ export const Preview = () => {
       isProcessingProductImage: true,
     }));
 
-    const productImage = await sdk().images.createFromFile({
+    const productImage = await sdk.images.createFromFile({
       file: selection.file,
     });
 
-    let productInfo = await sdk().operations.create.gpt.v1({
-      input: {
-        prompt:
-          "Detect main product on the image and create short description of a model wearing this product in the studio. Return the description as json { product, apparelType, modelDescription }",
-        imageId: productImage.id,
-      },
-    });
-
-    productInfo = await sdk().operations.wait({ id: productInfo.id });
+    let productInfo = await sdk.operations.wait(
+      await sdk.operations.create.gpt.v1({
+        input: {
+          prompt:
+            "Detect main product on the image and create short description of a model wearing this product in the studio. Return the description as json { product, apparelType, modelDescription }",
+          imageId: productImage.id,
+        },
+      })
+    );
 
     setForm((f) => ({
       ...f,
@@ -137,17 +143,17 @@ export const Preview = () => {
       isProcessingPose: true,
     }));
 
-    const poseImage = await sdk().images.createFromFile({
+    const poseImage = await sdk.images.createFromFile({
       file: selection.file,
     });
 
-    let pose = await sdk().operations.create.estimatePose.v1({
-      input: {
-        imageId: poseImage.id,
-      },
-    });
-
-    pose = await sdk().operations.wait({ id: pose.id });
+    let pose = await sdk.operations.wait(
+      await sdk.operations.create.estimatePose.v1({
+        input: {
+          imageId: poseImage.id,
+        },
+      })
+    );
 
     setForm((f) => ({
       ...f,
@@ -157,7 +163,7 @@ export const Preview = () => {
   };
 
   const handleCreateCollection = async () => {
-    const collection = await sdk().collections.create({});
+    const collection = await sdk.collections.create({});
 
     setForm((f) => ({ ...f, collectionId: collection.id }));
   };
@@ -307,7 +313,7 @@ export const Preview = () => {
             style={{
               width: "500px",
               height: "500px",
-              border: "solid black 1px",
+              border: "dashed #DDD 1px",
             }}
           ></div>
         </Section>

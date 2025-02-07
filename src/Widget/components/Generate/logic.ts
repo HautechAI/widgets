@@ -33,17 +33,16 @@ const useLogic = () => {
 
     try {
       if (widgetProps.input?.model === "linda") {
-        let hauteOperation = await sdk.operations.create.haute.linda.v1({
-          input: {
-            aspectRatio: widgetProps.input?.aspectRatio ?? "1:1",
-            productImageId: widgetProps.input?.productImageId ?? "",
-            prompt: widgetProps.input?.prompt ?? "",
-            seed: widgetProps.input?.seed ?? sdk.utils.seed(),
-          },
-        });
-        hauteOperation = await sdk.operations.wait({
-          id: hauteOperation.id,
-        });
+        const hauteOperation = await sdk.operations.wait(
+          await sdk.operations.create.haute.linda.v1({
+            input: {
+              aspectRatio: widgetProps.input?.aspectRatio ?? "1:1",
+              productImageId: widgetProps.input?.productImageId ?? "",
+              prompt: widgetProps.input?.prompt ?? "",
+              seed: widgetProps.input?.seed ?? sdk.utils.seed(),
+            },
+          })
+        );
 
         await Promise.all(
           ((hauteOperation.output as any)?.imageIds ?? []).map(
@@ -150,15 +149,40 @@ const useLogic = () => {
           return;
         }
 
-        let [resultImageId, maskImageId] = (hauteOperation.output as any)
-          ?.imageIds;
+        let resultImageId = (hauteOperation.output as any)?.imageId;
 
         if (widgetProps.input?.enhance) {
+          const detectApparel = await sdk.operations.wait(
+            await sdk.operations.create.detect.v1({
+              input: {
+                imageId: resultImageId,
+                labels: [widgetProps.input?.category ?? "garment"],
+              },
+            })
+          );
+
+          const maskApparel = await sdk.operations.wait(
+            await sdk.operations.create.segmentMask.v1({
+              input: {
+                imageId: resultImageId,
+                box: (detectApparel as any).output.data[0],
+              },
+            })
+          );
+
+          const negativeMask = await sdk.operations.wait(
+            await sdk.operations.create.negateImage.v1({
+              input: {
+                imageId: maskApparel.output?.imageId!,
+              },
+            })
+          );
+
           const enhanceOperation = await sdk.operations.wait(
             await sdk.operations.create.inpaint.kate.v1({
               input: {
                 imageId: resultImageId,
-                maskImageId,
+                maskImageId: negativeMask.output?.imageId!,
                 prompt: widgetProps.input?.prompt ?? "",
                 strength: 0.4,
                 seed: widgetProps.input?.seed ?? sdk.utils.seed(),
@@ -167,7 +191,7 @@ const useLogic = () => {
             })
           );
 
-          resultImageId = (enhanceOperation.output as any).imageId;
+          resultImageId = enhanceOperation.output?.imageId;
         }
 
         const newStack = await stacksAPI.create();

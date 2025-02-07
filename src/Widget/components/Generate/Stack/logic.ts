@@ -60,15 +60,15 @@ const useLogic = (props: Props) => {
           (stack.items[0] as OperationEntity).input as any
         ).productImageId;
 
-        let describeOperation = await sdk.operations.create.gpt.v1({
-          input: {
-            prompt: `Describe the product in the image. The product is a ${category}. Return the description as json { text }`,
-            imageId: productImageId,
-          },
-        });
-        describeOperation = await sdk.operations.wait({
-          id: describeOperation.id,
-        });
+        const describeOperation = await sdk.operations.wait(
+          await sdk.operations.create.gpt.v1({
+            input: {
+              prompt: `Describe the product in the image. The product is a ${category}. Return the description as json { text }`,
+              imageId: productImageId,
+            },
+          })
+        );
+
         const description = (describeOperation.output as any)?.data?.text;
         if (!description) throw new Error("Failed to describe product");
 

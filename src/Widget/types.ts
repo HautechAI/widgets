@@ -20,16 +20,24 @@ export type WidgetButtonConfiguration = {
 
 export type WidgetProps = {
   collectionId?: string;
-  input?: {
-    seed: number;
-    prompt: string;
-    productImageId: string;
-    aspectRatio: LindaHauteV1InputAspectRatioEnum;
-    model: "linda" | "naomi";
-    enhance?: boolean;
-    category?: string;
-    poseId?: string;
-  };
+  input?:
+    | {
+        model: "linda";
+        productImageId: string;
+        prompt: string;
+        aspectRatio: LindaHauteV1InputAspectRatioEnum;
+        seed: number;
+        enhance?: boolean;
+      }
+    | {
+        model: "naomi";
+        productImageId: string;
+        category: string;
+        prompt: string;
+        seed: number;
+        poseId: string;
+        enhance?: boolean;
+      };
   buttons?: {
     download?: WidgetButtonConfiguration;
     retouch?: WidgetButtonConfiguration;

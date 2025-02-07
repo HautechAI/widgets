@@ -21,6 +21,8 @@ const style = {
         min-height: 256px;
         position: relative;
         width: 100%;
+         border-radius: 4px;
+        overflow: hidden;
     `,
     ImageOverlay: styled('div')`
         align-items: center;
