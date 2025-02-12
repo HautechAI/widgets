@@ -82,13 +82,11 @@ export const Preview = () => {
   const sdk = useMemo(() => {
     return createSDK({
       authToken: () => form.token!,
-      endpoint: "https://api.dev.hautech.ai",
     });
   }, [form.token]);
 
   const handleInit = () => {
     const methods = init(document.getElementById("widget") as HTMLElement, {
-      endpoint: "https://api.dev.hautech.ai",
       props: formToWidgetProps(form),
       handlers: {
         onGetAuthToken: async () => {

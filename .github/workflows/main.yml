@@ -1,37 +1,37 @@
-name: CI
-on:
-    push:
-        branches:
-            - main
-jobs:
-    build:
-        name: Build
-        runs-on: ubuntu-latest
-        permissions:
-            contents: read
-            id-token: write
-        environment: main
+# name: CI
+# on:
+#     push:
+#         branches:
+#             - main
+# jobs:
+#     build:
+#         name: Build
+#         runs-on: ubuntu-latest
+#         permissions:
+#             contents: read
+#             id-token: write
+#         environment: main
 
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v4
+#         steps:
+#             - name: Checkout
+#               uses: actions/checkout@v4
 
-            - name: Install node
-              uses: actions/setup-node@v4
-              with:
-                  node-version: '20.x'
-                  registry-url: 'https://registry.npmjs.org'
+#             - name: Install node
+#               uses: actions/setup-node@v4
+#               with:
+#                   node-version: '20.x'
+#                   registry-url: 'https://registry.npmjs.org'
             
-            - name: Install pnpm
-              uses: pnpm/action-setup@v4
+#             - name: Install pnpm
+#               uses: pnpm/action-setup@v4
 
-            - name: Install dependencies
-              run: pnpm install --frozen-lockfile
+#             - name: Install dependencies
+#               run: pnpm install --frozen-lockfile
 
-            - name: Build
-              run: pnpm build:lib
+#             - name: Build
+#               run: pnpm build:lib
 
-            - name: Publish
-              run: cd dist && npm publish --access public
-              env:
-                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+#             - name: Publish
+#               run: cd dist && npm publish --access public
+#               env:
+#                   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
