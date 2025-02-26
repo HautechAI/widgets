@@ -56,9 +56,7 @@ const useLogic = (props: Props) => {
     async (category: "lower_body" | "upper_body" | "dresses") => {
       if (!imageId) return;
       await runAction(async () => {
-        const productImageId = (
-          (stack.items[0] as OperationEntity).input as any
-        ).productImageId;
+        const productImageId = stack.items[0].id;
 
         const describeOperation = await sdk.operations.wait(
           await sdk.operations.create.gpt.v1({
