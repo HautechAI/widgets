@@ -262,6 +262,7 @@ export const Preview = () => {
               <Row>
                 <SectionLabel>Pose</SectionLabel>
                 {form.isProcessingPose && <Status>Loading</Status>}
+                {form.poseId && <Status>id: {form.poseId}</Status>}
               </Row>
               <SingleImageUploader
                 onChangeSelection={handlePoseImageSelection}
