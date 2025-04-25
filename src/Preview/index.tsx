@@ -37,6 +37,16 @@ type Form = {
   enhance?: boolean;
 };
 
+
+interface IProductInfoOutput {
+    apparelType?: string;
+    modelDescription?: string;
+}
+
+interface IPoseInfoOutput {
+  poseId: string;
+}
+
 export const Preview = () => {
   const [form, setForm] = useState<Form>({
     token: "",
@@ -46,6 +56,8 @@ export const Preview = () => {
     enhance: true,
   });
 
+  const [isCreatingCollection, setIsCreatingCollection] = useState(false);
+  const [creatingCollectionError, setCreatingCollectionError] = useState<string>();
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
 
   const formToWidgetProps = (form: Form) => {
@@ -53,24 +65,28 @@ export const Preview = () => {
       collectionId: form.collectionId,
       input:
         form.model === "linda"
-          ? {
-              model: form.model,
-              seed: parseInt(form.seed ?? "42"),
-              productImageId: form.productImageId,
-              prompt: form.prompt,
-              aspectRatio: "1:1",
-              enhance: form.enhance,
-            }
-          : {
-              model: form.model,
-              seed: parseInt(form.seed ?? "42"),
-              productImageId: form.productImageId,
-              prompt: form.prompt,
-              category: form.productCategory,
-              poseId: form.poseId,
-              enhance: form.enhance,
-            },
-    } as WidgetProps;
+          ? form.productImageId && form.prompt
+            ? {
+                model: form.model,
+                seed: parseInt(form.seed ?? "42"),
+                productImageId: form.productImageId,
+                prompt: form.prompt,
+                aspectRatio: "1:1",
+                enhance: form.enhance,
+              }
+            : undefined
+          : form.productImageId && form.productCategory && form.prompt && form.poseId
+            ? {
+                model: form.model,
+                seed: parseInt(form.seed ?? "42"),
+                productImageId: form.productImageId,
+                prompt: form.prompt,
+                category: form.productCategory,
+                poseId: form.poseId,
+                enhance: form.enhance,
+              }
+            : undefined,
+    } satisfies WidgetProps;
   };
 
   const [widgetMethods, setWidgetMethods] = useState<Partial<WidgetMethods>>();
@@ -115,7 +131,7 @@ export const Preview = () => {
       file: selection.file,
     });
 
-    let productInfo = await sdk.operations.wait(
+    const productInfoResponse = await sdk.operations.wait(
       await sdk.operations.create.gpt.v1({
         input: {
           prompt:
@@ -124,12 +140,13 @@ export const Preview = () => {
         },
       })
     );
+    const productInfo: IProductInfoOutput | null = productInfoResponse.output?.data as IProductInfoOutput
 
     setForm((f) => ({
       ...f,
       productImageId: productImage.id,
-      productCategory: (productInfo.output as any)?.data?.apparelType,
-      prompt: (productInfo.output as any)?.data?.modelDescription,
+      productCategory: productInfo?.apparelType,
+      prompt: productInfo?.modelDescription,
       isProcessingProductImage: false,
     }));
   };
@@ -145,7 +162,7 @@ export const Preview = () => {
       file: selection.file,
     });
 
-    let pose = await sdk.operations.wait(
+    const poseResponse = await sdk.operations.wait(
       await sdk.operations.create.estimatePose.v1({
         input: {
           imageId: poseImage.id,
@@ -153,17 +170,27 @@ export const Preview = () => {
       })
     );
 
+    const poseInfo: IPoseInfoOutput | null = poseResponse.output?.data as IPoseInfoOutput
+
     setForm((f) => ({
       ...f,
-      poseId: (pose.output as any).data.poseId,
+      poseId: poseInfo?.poseId,
       isProcessingPose: false,
     }));
   };
 
   const handleCreateCollection = async () => {
-    const collection = await sdk.collections.create({});
+    setIsCreatingCollection(true);
+    setCreatingCollectionError(undefined);
 
-    setForm((f) => ({ ...f, collectionId: collection.id }));
+    try {
+      const collection = await sdk.collections.create({});
+      setForm((f) => ({ ...f, collectionId: collection.id }));
+    } catch (e) {
+      setCreatingCollectionError((e as Error).message);
+    } finally {
+      setIsCreatingCollection(false);
+    }
   };
 
   return (
@@ -193,8 +220,15 @@ export const Preview = () => {
               }
             />
             or
-            <LinkButton onClick={handleCreateCollection}>create new</LinkButton>
+            {isCreatingCollection ? (
+                <Status>Creating collection...</Status>
+            ) : (
+                  <LinkButton onClick={handleCreateCollection}>create new</LinkButton>
+            )}
           </Row>
+
+          {creatingCollectionError &&
+              <Status style={{color: 'red', fontSize: '12px'}}>{creatingCollectionError}</Status>}
         </Section>
 
         <Section>
@@ -215,8 +249,8 @@ export const Preview = () => {
             value={form.model}
             size="small"
             exclusive
-            onChange={(e) =>
-              setForm((f) => ({ ...f, model: (e.target as any).value }))
+            onChange={(_, value) =>
+              setForm((f) => ({ ...f, model: value }))
             }
           >
             <ToggleButton value="linda">Linda</ToggleButton>
@@ -239,12 +273,12 @@ export const Preview = () => {
             value={form.enhance ? "enabled" : "disabled"}
             size="small"
             exclusive
-            onChange={(e) =>
-              setForm((f) => ({
-                ...f,
-                enhance: (e.target as any).value === "enabled",
-              }))
-            }
+                onChange={(_, value) =>
+                  setForm((f) => ({
+                    ...f,
+                    enhance: value === "enabled",
+                  }))
+                }
           >
             <ToggleButton value="enabled">Enabled</ToggleButton>
             <ToggleButton value="disabled">Disabled</ToggleButton>
