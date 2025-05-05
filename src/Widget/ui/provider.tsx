@@ -1,6 +1,6 @@
-import { ThemeProvider } from "@mui/material";
-import theme from "./theme";
+import { ThemeProvider } from "@hautechai/webui.themeprovider";
+import { Theme } from "@hautechai/webui.theme";
 
 export const UIProvider = (props: { children: any }) => (
-  <ThemeProvider theme={theme}>{props.children}</ThemeProvider>
+  <ThemeProvider theme={Theme}>{props.children}</ThemeProvider>
 );

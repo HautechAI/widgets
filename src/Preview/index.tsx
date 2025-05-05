@@ -347,6 +347,7 @@ export const Preview = () => {
               width: "500px",
               height: "500px",
               border: "dashed #DDD 1px",
+              display: "flex",
             }}
           ></div>
         </Section>
